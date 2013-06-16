@@ -48,10 +48,6 @@ public class SearchSubtitle {
 	}
 	
 	public void settingLangage(String langage) throws ClientProtocolException, IOException{
-		String response = getResponse("http://subscene.com/filter");
-		
-		
-		
 		post = new HttpPost("http://subscene.com/filter");
 		
 		List<NameValuePair> nvps = new ArrayList <NameValuePair>();
@@ -148,7 +144,6 @@ public class SearchSubtitle {
 			parameters = Yaml.loadType(new File("parameters.yml"),Parameters.class);
 			System.out.println(searchSubtitle.searchSubtitle(parameters).toStringVerbose());
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
