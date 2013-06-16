@@ -8,10 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.http.Consts;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -36,7 +34,6 @@ import folder.ListenFolder;
 public class SearchSubtitle {
 	
 	private BufferedReader br = null;
-	private PostMethod method = null;
 	private HttpGet get  = null;
 	private HttpPost post = null;
 	private HttpClient httpclient;
@@ -51,10 +48,14 @@ public class SearchSubtitle {
 	}
 	
 	public void settingLangage(String langage) throws ClientProtocolException, IOException{
-		post = new HttpPost("http://subscene.com/filter?returnUrl=%2f");
+		String response = getResponse("http://subscene.com/filter");
+		
+		
+		
+		post = new HttpPost("http://subscene.com/filter");
 		
 		List<NameValuePair> nvps = new ArrayList <NameValuePair>();
-		nvps.add(new BasicNameValuePair("SelectedIds", "13" ));
+		nvps.add(new BasicNameValuePair("SelectedIds", langage ));
 
 		post.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
 		
@@ -91,35 +92,14 @@ public class SearchSubtitle {
 			else{
 				String url = setUrl(child.getValue());
 				
-				get = new HttpGet(url);
-
-				HttpResponse response7 = httpclient.execute(get);
-
-				br = new BufferedReader(new InputStreamReader(response7.getEntity().getContent()));
-				String readLine = null;
-				String response = "";
-				while(((readLine = br.readLine()) != null))
-				{
-					response += readLine + "\n";
-				}
+				String response = getResponse(url);
 				
 				int begin = response.indexOf("<a href=\"/subtitles/")+9;						                  
 				int end = response.indexOf("\">",begin);
 				String subtitleLink = response.substring(begin,end);
 				
-				get = new HttpGet("http://subscene.com"+subtitleLink);
+				response = getResponse("http://subscene.com"+subtitleLink);
 
-
-				response7 = httpclient.execute(get);
-				//System.out.println(response7);
-
-				br = new BufferedReader(new InputStreamReader(response7.getEntity().getContent()));
-				readLine = null;
-				response = "";
-				while(((readLine = br.readLine()) != null))
-				{
-					response += readLine;
-				}
 				begin = 0;
 				end = 0;
 				begin = response.indexOf("href=\"/subtitle/download")+6;						                  
@@ -131,6 +111,22 @@ public class SearchSubtitle {
 			}
 			
 		}
+	}
+
+	private String getResponse(String url) throws IOException,
+			ClientProtocolException {
+		get = new HttpGet(url);
+
+		HttpResponse response7 = httpclient.execute(get);
+
+		br = new BufferedReader(new InputStreamReader(response7.getEntity().getContent()));
+		String readLine = null;
+		String response = "";
+		while(((readLine = br.readLine()) != null))
+		{
+			response += readLine + "\n";
+		}
+		return response;
 	}
 
 	private static String setUrl(String filename) {

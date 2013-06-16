@@ -8,14 +8,7 @@ import org.ho.yaml.Yaml;
 public class Parameters {
 	String langage;
 	String folder;
-	boolean recursif;
-	
-	public Parameters() {
-		langage = "english";
-		folder = "test";
-		recursif = true;
-	}
-	
+		
 	public String getLangage() {
 		return langage;
 	}
@@ -30,13 +23,5 @@ public class Parameters {
 
 	public void setFolder(String folder) {
 		this.folder = folder;
-	}
-
-	public boolean isRecursif() {
-		return recursif;
-	}
-
-	public void setRecursif(boolean recursif) {
-		this.recursif = recursif;
 	}
 }
