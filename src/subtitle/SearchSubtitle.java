@@ -47,12 +47,13 @@ public class SearchSubtitle {
 		
 	}
 	
-	public void settingLangage(String langage) throws ClientProtocolException, IOException{
+	public void setting(String langage) throws ClientProtocolException, IOException{
 		post = new HttpPost("http://subscene.com/filter");
 		
 		List<NameValuePair> nvps = new ArrayList <NameValuePair>();
 		nvps.add(new BasicNameValuePair("SelectedIds", langage ));
-
+		nvps.add(new BasicNameValuePair("HearingImpaired", "0" ));
+		
 		post.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
 		
 		httpclient.execute(post);
@@ -62,7 +63,7 @@ public class SearchSubtitle {
 		GenericTreeNode<File,String> treeLink = null;
 		
 		try {
-			settingLangage(parameters.getLangage());
+			setting(parameters.getLangage());
 
 			ListenFolder listenFolder = new ListenFolder();
 			File f_folder = new File(parameters.getFolder());
@@ -93,7 +94,6 @@ public class SearchSubtitle {
 				int begin = response.indexOf("<a href=\"/subtitles/")+9;						                  
 				int end = response.indexOf("\">",begin);
 				String subtitleLink = response.substring(begin,end);
-				
 				response = getResponse("http://subscene.com"+subtitleLink);
 
 				begin = 0;
@@ -101,7 +101,6 @@ public class SearchSubtitle {
 				begin = response.indexOf("href=\"/subtitle/download")+6;						                  
 				end = response.indexOf("\"",begin);
 				String downloadSubtitleLink = response.substring(begin,end);
-				
 				child.setValue(downloadSubtitleLink);
 				
 			}
@@ -127,13 +126,12 @@ public class SearchSubtitle {
 
 	private static String setUrl(String filename) {
 		String[] partsFilename = filename.split("\\.");
-		String url = "http://subscene.com/subtitles/release.aspx?q=";
+		String url = "http://subscene.com/subtitles/release?q=";
 		
 		for (int i = 0; i < partsFilename.length - 2 ; i++) {
 			url += partsFilename[i] + "+";
 		}
 		url += partsFilename[ partsFilename.length - 1]; 
-			
 		return url;
 	}
 	

@@ -27,11 +27,6 @@ import org.ho.yaml.Yaml;
 import parameters.Parameters;
 import util.GenericTreeNode;
 
-
-
-
-
-
 public class DownloadSubtitle {
 
 	private HttpClient httpclient;
@@ -104,6 +99,7 @@ public class DownloadSubtitle {
 							}dest.flush();
 							dest.close();
 						}
+						zis.close();
 
 					}
 					else{

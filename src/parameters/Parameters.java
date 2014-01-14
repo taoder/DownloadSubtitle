@@ -1,10 +1,5 @@
 package parameters;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-
-import org.ho.yaml.Yaml;
-
 public class Parameters {
 	String langage;
 	String folder;
